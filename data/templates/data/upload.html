@@ -1,0 +1,22 @@
+{% include 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    
+<h1>Data Upload</h1>
+<p>
+    This page allows data to be uploaded. </p>
+
+    {% if supported_file_types %}
+        <p>The following formats are currently supported:</p>
+        <ul>
+            {% for supported_file_type in supported_file_types %}
+            <li>{{ supported_file_type }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+</div>
+
+{% endblock %}
