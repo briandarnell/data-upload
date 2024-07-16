@@ -49,16 +49,22 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                                  
+                        {% if user.is_staff %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
+                        </li>
+                        {% endif %}
+
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'data:home' %}">Data Home</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'data:upload' %}">Upload Data</a>
+                            <a class="nav-link" href="{% url 'data:upload_data' %}">Upload Data</a>
                         </li>
                         
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'data:view' %}">View Data</a>
+                            <a class="nav-link" href="{% url 'data:view_data' %}">Download Data</a>
                         </li>
 
                     </ul>

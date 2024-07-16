@@ -1,0 +1,36 @@
+{% include 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    
+{% if status == 'success' %}
+<div class="alert alert-success alert-dismissible fade show" role="alert" id="message">
+    Data uploaded successfully.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+
+<h1>View Data</h1>
+
+<p>This page allows you to view and query data.</p>
+
+<p>Data can be obtained in the following formats:</p>
+<table class="table">
+    <tr>
+        <th>Format</th>
+        <th>File Extension</th>
+        <th>MIME Type</th>
+        <th>Download Link</th>
+    </tr>
+    {% for codec, extension, mime_type in supported_codecs %}
+    <tr>
+        <td>{{ codec }}</td>
+        <td>.{{ extension }}</td>
+        <td>{{ mime_type }}</td>
+        <td><a href="{% url 'data:download_data' %}?type={{ extension }}" target="_blank">Download</a></td>
+    </tr>
+    {% endfor %}    
+</table>
+
+{% endblock %}

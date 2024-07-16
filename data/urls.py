@@ -7,6 +7,7 @@ app_name = "data"
 
 urlpatterns = [
     path("", views.home, name="home"),
-    path("upload/", views.upload, name="upload"),
-    path("view/", views.view, name="view"),
+    path("upload/", views.upload_data, name="upload_data"),
+    path("view/", views.view_data, name="view_data"),
+    path("download/", views.download_data, name="download_data"),
 ]

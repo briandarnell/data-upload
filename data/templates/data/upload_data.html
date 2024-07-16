@@ -1,0 +1,39 @@
+{% include 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="container">
+    
+<h1>Data Upload</h1>
+
+{% if upload_result %}
+<div class="alert alert-danger alert-dismissible fade show" role="alert" id="message">
+    {{ upload_result }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+
+<p>This page allows data to be uploaded. Please choose a file, a field mapping and optionally enter a description.</p>
+{% if user.is_staff %}
+<p><a href="{% url 'admin:data_fieldmapping_add' %}" target="_blank">Create new mapping in the Admin</a></p>
+{% endif %}
+
+    {% if supported_codec_names %}
+        <p>The following file formats are currently supported:</p>
+        <ul>
+            {% for codec_name in supported_codec_names %}
+            <li>{{ codec_name }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ upload_form|crispy }}
+        <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+
+</div>
+
+{% endblock %}
