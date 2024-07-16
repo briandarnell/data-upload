@@ -1,3 +1,5 @@
+import os
+
 from django import forms
 from django.contrib.auth.models import User
 from django.db.utils import IntegrityError
@@ -14,6 +16,9 @@ app_name = "data"
 
 def home(request):
     context = {}
+    context["username"] = os.getenv("DJANGO_SUPERUSER_USERNAME")
+    context["password"] = os.getenv("DJANGO_SUPERUSER_PASSWORD")
+
     template = f"{app_name}/home.html"
 
     return render(request, template, context)
@@ -28,7 +33,7 @@ class UploadForm(forms.ModelForm):
             "description": forms.Textarea(attrs={"rows": 3, "cols": 80}),
         }
 
-    # Only accept .csv and .json files
+    # Only accept supported file types
     def clean_file(self):
         file = self.cleaned_data.get("file")
 
@@ -58,8 +63,8 @@ def upload_data(request):
 
             upload_instance = upload_form.save(commit=False)
 
-            # Now process the data
-            # For demonstration we will do this synchronously
+            # Attempt to process the data
+            # For demonstration purposes we will do this synchronously
             # In a production environment, this might be done asynchronously
             upload_result = process_upload(upload_instance, request.FILES["file"])
 
@@ -68,18 +73,12 @@ def upload_data(request):
                 if request.user.is_authenticated:
                     upload_instance.uploaded_by = request.user
 
-                try:
-                    upload_instance.save()
-                    # Always redirect successful forms to avoid form resubmission on page refresh
-                    url = reverse(f"{app_name}:view_data")
-                    query_params = "?status=success"
-                    return redirect(f"{url}{query_params}")
+                upload_instance.save()
 
-                except IntegrityError as e:
-                    # This is a duplicate file condition
-                    context["upload_result"] = (
-                        f"The file {upload_instance.file.name} has already been uploaded (hash: {upload_instance.file_hash})."
-                    )
+                # Always redirect successful forms to avoid form resubmission if user refreshes the page
+                url = reverse(f"{app_name}:view_data")
+                query_params = "?status=success"
+                return redirect(f"{url}{query_params}")
 
             else:
 
@@ -112,26 +111,9 @@ def download_data(request):
 
     type = request.GET.get("type", None)
 
-    if type is None:
-        type = "json"
+    data_out, mime_type, extension = get_data_for_download(type, None)
 
-    codec_class = CodecStrategy.get_subclass_from_extension(type)
-    codec = codec_class()
-
-    # For demonstration purposes, we will just get the first mapping
-    # In a production environment, the user might have to select the mapping
-    mapping = FieldMapping.objects.first().mapping
-    reverse_mapping = {db: file for file, db in mapping.items()}
-
-    field_list = [db for _, db in mapping.items()]
-
-    data = list(Data.objects.all().values(*field_list))
-
-    data_with_mapping = replace_keys_in_list_of_dicts(data, reverse_mapping)
-
-    data_out = codec.from_dict(data_with_mapping)
-
-    response = HttpResponse(data_out, content_type=codec.mime_type)
-    response["Content-Disposition"] = f"attachment; filename=data.{codec.extension}"
+    response = HttpResponse(data_out, content_type=mime_type)
+    response["Content-Disposition"] = f"attachment; filename=data.{extension}"
 
     return response

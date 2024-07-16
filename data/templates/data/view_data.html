@@ -13,11 +13,12 @@
 
 <h1>View Data</h1>
 
-<p>This page allows you to download the data.
-{% if data_count %}
-There are <b>{{ data_count }}</b> rows of data that can be downloaded.
-{% endif %}
-</p>
+<p>This page allows you to download the data.</p>
+    
+{% if data_count == 0 %}
+<p><b>There is no data available for download. Try uploading some data.</b></p>
+{% else  %}
+<p>There are <b>{{ data_count }}</b> entries of data that can be downloaded.</p>
 
 <p>Data can be obtained in the following formats:</p>
 <table class="table">
@@ -32,9 +33,11 @@ There are <b>{{ data_count }}</b> rows of data that can be downloaded.
         <td>{{ codec }}</td>
         <td>.{{ extension }}</td>
         <td>{{ mime_type }}</td>
-        <td><a href="{% url 'data:download_data' %}?type={{ extension }}" target="_blank">Download</a></td>
+        <td><a href="{% url 'data:download_data' %}?type={{ extension }}" target="_blank">Download {{ data_count }} data entries as {{ codec }}</a></td>
     </tr>
-    {% endfor %}    
+    {% endfor %}
 </table>
+
+{% endif %}
 
 {% endblock %}

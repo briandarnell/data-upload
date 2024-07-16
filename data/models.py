@@ -1,5 +1,4 @@
 import hashlib
-import json
 
 from django.db import models
 
@@ -13,6 +12,7 @@ class BaseModel(models.Model):
         abstract = True
 
 
+# A model for the files uploads
 class Upload(BaseModel):
     uploaded_by = models.ForeignKey("auth.User", on_delete=models.CASCADE, null=True)
     # In this demonstration, we store the file on the server
@@ -43,9 +43,11 @@ class Upload(BaseModel):
         hasher = hashlib.sha256()
         for chunk in self.file.chunks():
             hasher.update(chunk)
+        self.file.seek(0)
         return hasher.hexdigest()
 
 
+# A mode to store the data that has been uploaded
 class Data(BaseModel):
     timestamp = models.DateTimeField()
     sensorid = models.IntegerField()  # Potentially a foreign key to a Sensor model
@@ -53,17 +55,16 @@ class Data(BaseModel):
     humidity = models.DecimalField(max_digits=4, decimal_places=1)
     pressure = models.DecimalField(max_digits=4, decimal_places=0)
 
-    class Meta:
-        # To prevent duplicate data points
-        unique_together = ["timestamp", "sensorid"]
-        # However, sometimes in the real world, we come across duplicate points that even have different data values
-        # Therefore depending on the data cleaning strategy, this constraint may need to be removed
-
     def __str__(self):
         return f"{self.timestamp} - Sensor {self.sensorid}"
 
     class Meta:
         verbose_name_plural = "Data"
+
+        # To prevent duplicate data points
+        unique_together = [["timestamp", "sensorid"]]
+        # However, sometimes in the real world, we come across duplicate points that even have different data values
+        # Therefore depending on the data cleaning strategy, this constraint may need to be removed
 
 
 class FieldMapping(BaseModel):

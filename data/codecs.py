@@ -8,7 +8,7 @@ Other potential codecs include XML, XLSX and YAML.
 import csv
 import io
 import json
-from datetime import datetime, timezone
+from datetime import datetime
 from decimal import Decimal
 
 
@@ -16,7 +16,7 @@ class CodecStrategy(type):
     # Class-level list to keep track of subclasses
     subclasses = []
 
-    # Create a list of all the strategies
+    # Create a list of all the codecs
     names = []
     mime_types = []
     extensions = []
@@ -25,7 +25,7 @@ class CodecStrategy(type):
         super().__init__(name, bases, class_dict)
         # Register the subclass
         CodecStrategy.subclasses.append(cls)
-        # Register the strategy
+        # Register the codec details
         cls.names.append(class_dict["name"])
         cls.mime_types.append(class_dict["mime_type"])
         cls.extensions.append(class_dict["extension"])
@@ -49,7 +49,7 @@ class JsonCodec(metaclass=CodecStrategy):
         return json.loads(data_in)
 
     def from_dict(self, data_in):
-        return json.dumps(data_in, default=JsonCodec.json_serial)
+        return json.dumps(data_in, indent=4, default=JsonCodec.json_serial)
 
     @staticmethod
     def json_serial(obj):
