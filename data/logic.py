@@ -20,17 +20,16 @@ def process_upload(upload_instance, file):
 
     # Use a try-catch block in case of bad data
     # submitted by the user
-    # try:
-    data_dict = codec.to_dict(upload_data)
+    try:
+        data_dict = codec.to_dict(upload_data)
+        data_dict_with_mapping = replace_keys_in_list_of_dicts(
+            data_dict, upload_instance.field_mapping.mapping
+        )
+        Data.objects.bulk_create([Data(**d) for d in data_dict_with_mapping])
 
-    # except Exception as e:
-    #    print(e)
-    #    return "Data processing failed: " + str(e)
-
-    data_dict_with_mapping = replace_keys_in_list_of_dicts(
-        data_dict, upload_instance.field_mapping.mapping
-    )
-    Data.objects.bulk_create([Data(**d) for d in data_dict_with_mapping])
+    except Exception as e:
+        print(e)
+        return "Data processing failed: " + str(e)
 
     upload_instance.status = "processed"
 

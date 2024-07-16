@@ -13,7 +13,11 @@
 
 <h1>View Data</h1>
 
-<p>This page allows you to view and query data.</p>
+<p>This page allows you to download the data.
+{% if data_count %}
+There are <b>{{ data_count }}</b> rows of data that can be downloaded.
+{% endif %}
+</p>
 
 <p>Data can be obtained in the following formats:</p>
 <table class="table">

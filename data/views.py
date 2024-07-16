@@ -32,7 +32,7 @@ class UploadForm(forms.ModelForm):
     def clean_file(self):
         file = self.cleaned_data.get("file")
 
-        allowed_file_types = tuple(CodecStrategy.file_types)
+        allowed_file_types = tuple(CodecStrategy.extensions)
 
         if not file.name.endswith(allowed_file_types):
             raise forms.ValidationError(
@@ -71,7 +71,7 @@ def upload_data(request):
                 try:
                     upload_instance.save()
                     # Always redirect successful forms to avoid form resubmission on page refresh
-                    url = reverse(f"{app_name}:view")
+                    url = reverse(f"{app_name}:view_data")
                     query_params = "?status=success"
                     return redirect(f"{url}{query_params}")
 
@@ -100,6 +100,8 @@ def view_data(request):
     mime_types = CodecStrategy.mime_types
 
     context["supported_codecs"] = zip(codec_names, extensions, mime_types)
+
+    context["data_count"] = Data.objects.all().count()
 
     template = f"{app_name}/view_data.html"
 
