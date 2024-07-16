@@ -28,15 +28,14 @@ cd data-upload
 2. Build and start the Docker containers:
 ```bash
 docker-compose up --build
-Run database migrations and create a superuser:
 ```
-```bash
-docker-compose exec web python manage.py migrate
-docker-compose exec web python manage.py createsuperuser
-```
+This command will also automatically migrate the necessary database changes and create a Django superuser.
 
-3. Usage
+## Usage
 Access the application in your web browser at http://localhost:8000.
+As this is only a demonstration project, an admin login is automatically set up:
+Username: admin
+Password: data_upload_tool
 
-4. License
+## License
 This project is licensed under the MIT License.

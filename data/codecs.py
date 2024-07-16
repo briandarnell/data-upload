@@ -2,6 +2,7 @@
 This module contains the various codecs (encoders and decoders) for the data.
 Each codec is self-registering and therefore new codecs can be added by simply creating a new class that inherits from CodecStrategy. 
 This makes the system highly extensible whilst remaining DRY, clear and maintainable.
+Other potential codecs include XML, XLSX and YAML.
 """
 
 import csv

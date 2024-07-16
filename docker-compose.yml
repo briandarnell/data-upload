@@ -4,15 +4,18 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: python /code/manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
     ports:
       - "8000:8000"
-    env_file:
-      - .env
     depends_on:
       - db
+    # As this is only a demonstration project, set
+    # password for a superuser in a plain text file
+    environment:
+      - DJANGO_SUPERUSER_USERNAME=admin
+      - DJANGO_SUPERUSER_EMAIL=admin@example.com
+      - DJANGO_SUPERUSER_PASSWORD=data_upload_tool
       
   db:
     image: postgres:16

@@ -123,14 +123,11 @@ def download_data(request):
     mapping = FieldMapping.objects.first().mapping
     reverse_mapping = {db: file for file, db in mapping.items()}
 
-    field_list = [db for file, db in mapping.items()]
-    print(field_list)
+    field_list = [db for _, db in mapping.items()]
 
     data = list(Data.objects.all().values(*field_list))
 
-    print(data)
     data_with_mapping = replace_keys_in_list_of_dicts(data, reverse_mapping)
-    print(data_with_mapping)
 
     data_out = codec.from_dict(data_with_mapping)
 

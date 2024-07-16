@@ -28,7 +28,6 @@ def process_upload(upload_instance, file):
         Data.objects.bulk_create([Data(**d) for d in data_dict_with_mapping])
 
     except Exception as e:
-        print(e)
         return "Data processing failed: " + str(e)
 
     upload_instance.status = "processed"
