@@ -39,7 +39,8 @@ Use the navigation bar to explore the features. Data can be uploaded and downloa
 The data and file uploads can be managed further using the Django admin menu. As this is only a demonstration project, an admin login is automatically set up:
 * Username: admin
 * Password: data_upload_tool
-In any product environment, admin credentials should be kept secure and not shared.
+
+Note: In any product environment, admin credentials should be kept secure and not shared.
 
 ## License
 This project is licensed under the MIT License.
