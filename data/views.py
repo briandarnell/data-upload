@@ -41,7 +41,7 @@ class UploadForm(forms.ModelForm):
 
         if not file.name.endswith(allowed_file_types):
             raise forms.ValidationError(
-                "Only the following file types are currently supported:"
+                "Only the following file types are currently supported: "
                 + ", ".join(allowed_file_types)
             )
 
@@ -83,8 +83,8 @@ def upload_data(request):
             else:
 
                 context["upload_result"] = upload_result
-
-    upload_form = UploadForm()
+    else:
+        upload_form = UploadForm()
 
     context["upload_form"] = upload_form
 
