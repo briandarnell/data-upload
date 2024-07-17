@@ -33,9 +33,13 @@ This command will also automatically migrate the necessary database changes and 
 
 ## Usage
 Access the application in your web browser at http://localhost:8000.
-As this is only a demonstration project, an admin login is automatically set up:
-Username: admin
-Password: data_upload_tool
+
+Use the navigation bar to explore the features. Data can be uploaded and downloaded. Currently JSON and CSV file formats are supported. A default field mapping is provided and other mappings can be added through the Django admin.
+
+The data and file uploads can be managed further using the Django admin menu. As this is only a demonstration project, an admin login is automatically set up:
+* Username: admin
+* Password: data_upload_tool
+In any product environment, admin credentials should be kept secure and not shared.
 
 ## License
 This project is licensed under the MIT License.
