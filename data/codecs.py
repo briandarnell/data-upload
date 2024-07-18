@@ -24,7 +24,7 @@ class CodecStrategy(type):
     def __init__(cls, name, bases, class_dict):
         super().__init__(name, bases, class_dict)
         # Register the subclass
-        CodecStrategy.subclasses.append(cls)
+        cls.subclasses.append(cls)
         # Register the codec details
         cls.names.append(class_dict["name"])
         cls.mime_types.append(class_dict["mime_type"])
